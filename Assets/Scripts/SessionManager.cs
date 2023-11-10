@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.UI;
+using TMPro;
 
 public class SessionManager : MonoBehaviour
 {
@@ -14,8 +16,13 @@ public class SessionManager : MonoBehaviour
         public float timeTaken;
         public float difficultyFactor;
         public float score;
-        public Dictionary<string, float> difficulty;
+        [System.Serializable]
+        public class DiffDetails: Dictionary<string,float> { }
+        public DiffDetails difficulty;
     }
+
+    public TMP_Dropdown patientDropdown;
+    public TMP_Dropdown activityDropdown;
 
     private string dataFilePath;
 
@@ -23,9 +30,10 @@ public class SessionManager : MonoBehaviour
     {
         System.DateTime currentDateTime = System.DateTime.Now;
 
-        string selectedPatient = GlobalDataManager.Instance.selectedPatient;
-        string selectedActivity = GlobalDataManager.Instance.selectedActivity;
-
+        string selectedPatient = patientDropdown.options[patientDropdown.value].text;
+        string selectedActivity = activityDropdown.options[activityDropdown.value].text;;
+        Debug.Log("selectedPatient: " + selectedPatient);
+        Debug.Log("selectedActivity: " + selectedActivity);
         SessionData session = new SessionData
         {
             patient = selectedPatient,
@@ -34,7 +42,7 @@ public class SessionManager : MonoBehaviour
             timeTaken = 30.5f,
             difficultyFactor = 0.8f,
             score = 95.5f,
-            difficulty = new Dictionary<string, float>
+            difficulty = new SessionData.DiffDetails
             {
                 { "level1", 2.3f },
                 { "level2", 1.7f },
@@ -43,7 +51,8 @@ public class SessionManager : MonoBehaviour
         };
 
         
-        dataFilePath = Path.Combine(Application.persistentDataPath, selectedPatient, selectedActivity, currentDateTime + ".json");
+        dataFilePath = Path.Combine(Application.persistentDataPath, "abc.json");
+        Debug.Log("dataFilePath: " + dataFilePath);
 
         string jsonData = JsonUtility.ToJson(session);
         File.WriteAllText(dataFilePath, jsonData);
