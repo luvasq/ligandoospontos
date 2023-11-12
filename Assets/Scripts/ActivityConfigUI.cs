@@ -29,7 +29,6 @@ public class ActivityConfigUI : MonoBehaviour
     // Use this method to load and display the configuration for a specific activity
     public void LoadAndDisplayActivityConfig()
     {
-        Debug.Log("CHAMOU LOAD AND DISPLAY");
         if (!isLoading)
         {
             isLoading = true;
@@ -76,11 +75,20 @@ public class ActivityConfigUI : MonoBehaviour
         // Check if the activity folder exists
         if (!File.Exists(activityFilePath))
         {
-            SessionData.DiffDetails defaults = new SessionData.DiffDetails
+            SessionData.DiffDetails defaults;
+            if (activityName == "Apertar Botão")
             {
-                { "Altura", 2.3f },
-                { "Distância", 1.7f }
-            };
+                defaults = new SessionData.DiffDetails
+                {
+                    { "Altura", 2.3f },
+                    { "Distância", 1.7f }
+                };
+            }
+            else
+            {
+                defaults = new SessionData.DiffDetails { { "Grau", 2.3f }, { "Distância", 1.7f } };
+            }
+
             string jsonData = JsonConvert.SerializeObject(defaults);
             File.WriteAllText(activityFilePath, jsonData);
         }

@@ -37,5 +37,6 @@ public class PatientDropdownListHandler : MonoBehaviour
     void Start()
     {
         UpdateDropdownOptions();
+        Debug.Log("finalizou start do dropbox");
     }
 }
