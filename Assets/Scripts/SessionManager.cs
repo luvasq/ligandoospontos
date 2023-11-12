@@ -1,65 +1,66 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
-using UnityEngine.UI;
+using Newtonsoft.Json;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class SessionManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class SessionData
-    {
-        public string patient;
-        public string activity;
-        public string timestamp;
-        public float timeTaken;
-        public float difficultyFactor;
-        public float score;
-        [System.Serializable]
-        public class DiffDetails: Dictionary<string,float> { }
-        public DiffDetails difficulty;
-    }
-
     public TMP_Dropdown patientDropdown;
     public TMP_Dropdown activityDropdown;
 
     private string dataFilePath;
 
-    public void Save()//SessionData session)
+    public void Save()
     {
         System.DateTime currentDateTime = System.DateTime.Now;
 
         string selectedPatient = patientDropdown.options[patientDropdown.value].text;
-        string selectedActivity = activityDropdown.options[activityDropdown.value].text;;
-        Debug.Log("selectedPatient: " + selectedPatient);
-        Debug.Log("selectedActivity: " + selectedActivity);
+        string selectedActivity = activityDropdown.options[activityDropdown.value].text;
+
         SessionData session = new SessionData
         {
             patient = selectedPatient,
             activity = selectedActivity,
-            timestamp = System.DateTime.Now.ToString(),
+            timestamp = currentDateTime.ToString(),
             timeTaken = 30.5f,
             difficultyFactor = 0.8f,
             score = 95.5f,
-            difficulty = new SessionData.DiffDetails
-            {
-                { "level1", 2.3f },
-                { "level2", 1.7f },
-                { "level3", 3.1f }
-            },
+            difficulty = new SessionData.DiffDetails { { "Altura", 2.3f }, { "Distância", 1.7f } },
         };
 
-        
-        dataFilePath = Path.Combine(Application.persistentDataPath, "abc.json");
-        Debug.Log("dataFilePath: " + dataFilePath);
+        string folderPath = Path.Combine(
+            Application.persistentDataPath,
+            selectedPatient,
+            selectedActivity
+        );
 
-        string jsonData = JsonUtility.ToJson(session);
+        // Create the necessary directories if they do not exist
+        Directory.CreateDirectory(folderPath);
+
+        dataFilePath = Path.Combine(
+            folderPath,
+            currentDateTime.ToString().Replace(' ', '_').Replace('/', '-').Replace(':', '-')
+                + ".json"
+        );
+
+        string jsonData = JsonConvert.SerializeObject(session);
         File.WriteAllText(dataFilePath, jsonData);
     }
 
     public SessionData Load()
     {
+        string selectedPatient = patientDropdown.options[patientDropdown.value].text;
+        string selectedActivity = activityDropdown.options[activityDropdown.value].text;
+
+        string folderPath = Path.Combine(
+            Application.persistentDataPath,
+            selectedPatient,
+            selectedActivity
+        );
+
         if (File.Exists(dataFilePath))
         {
             string jsonData = File.ReadAllText(dataFilePath);
