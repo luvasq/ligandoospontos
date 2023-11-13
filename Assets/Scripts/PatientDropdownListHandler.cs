@@ -24,7 +24,7 @@ public class PatientDropdownListHandler : MonoBehaviour
         foreach (string directory in directories)
         {
             string folderName = Path.GetFileName(directory);
-            if (folderName != "_activities")
+            if (folderName != "_activities" && folderName != "il2cpp")
             {
                 options.Add(folderName);
             }

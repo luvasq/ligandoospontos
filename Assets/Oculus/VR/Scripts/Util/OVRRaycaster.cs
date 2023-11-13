@@ -23,9 +23,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 /// <summary>
 /// Extension of GraphicRaycaster to support ray casting with world space rays instead of just screen-space
@@ -40,9 +40,7 @@ public class OVRRaycaster : GraphicRaycaster, IPointerEnterHandler
 
     public int sortOrder = 0;
 
-    protected OVRRaycaster()
-    {
-    }
+    protected OVRRaycaster() { }
 
     [NonSerialized]
     private Canvas m_Canvas;
@@ -73,10 +71,28 @@ public class OVRRaycaster : GraphicRaycaster, IPointerEnterHandler
     {
         if (!canvas.worldCamera)
         {
-            Debug.Log("Canvas does not have an event camera attached. " +
-                      "Attaching OVRCameraRig.centerEyeAnchor as default.");
+            Debug.Log(
+                "Canvas does not have an event camera attached. "
+                    + "Attaching OVRCameraRig.centerEyeAnchor as default."
+            );
             OVRCameraRig rig = FindObjectOfType<OVRCameraRig>();
             canvas.worldCamera = rig.centerEyeAnchor.gameObject.GetComponent<Camera>();
+        }
+
+        if (pointer == null)
+        {
+            // This OVRRaycaster is probably automatically generated (i.e. dropdown)
+            sortOrder = 1;
+            // Grab the raycast pointer from parent components
+            var parentRaycasters = GetComponentsInParent<OVRRaycaster>();
+            foreach (var raycaster in parentRaycasters)
+            {
+                if (raycaster != null && raycaster != this && raycaster.pointer != null)
+                {
+                    pointer = raycaster.pointer;
+                    break;
+                }
+            }
         }
     }
 
@@ -87,8 +103,12 @@ public class OVRRaycaster : GraphicRaycaster, IPointerEnterHandler
     [NonSerialized]
     private List<RaycastHit> m_RaycastResults = new List<RaycastHit>();
 
-    private void Raycast(PointerEventData eventData, List<RaycastResult> resultAppendList, Ray ray,
-        bool checkForBlocking)
+    private void Raycast(
+        PointerEventData eventData,
+        List<RaycastResult> resultAppendList,
+        Ray ray,
+        bool checkForBlocking
+    )
     {
         //This function is closely based on
         //void GraphicRaycaster.Raycast(PointerEventData eventData, List<RaycastResult> resultAppendList)
@@ -141,7 +161,9 @@ public class OVRRaycaster : GraphicRaycaster, IPointerEnterHandler
             }
 
             // Ignore points behind us (can happen with a canvas pointer)
-            if (eventCamera.transform.InverseTransformPoint(m_RaycastResults[index].worldPos).z <= 0)
+            if (
+                eventCamera.transform.InverseTransformPoint(m_RaycastResults[index].worldPos).z <= 0
+            )
             {
                 appendGraphic = false;
             }
@@ -162,7 +184,6 @@ public class OVRRaycaster : GraphicRaycaster, IPointerEnterHandler
                     distance = distance,
                     index = resultAppendList.Count,
                     depth = m_RaycastResults[index].graphic.depth,
-
                     worldPosition = m_RaycastResults[index].worldPos
                 };
                 resultAppendList.Add(castResult);
@@ -192,12 +213,17 @@ public class OVRRaycaster : GraphicRaycaster, IPointerEnterHandler
     {
         if (pointer != null && pointer.activeInHierarchy)
         {
-            Raycast(eventData, resultAppendList,
-                new Ray(eventCamera.transform.position,
-                    (pointer.transform.position - eventCamera.transform.position).normalized), false);
+            Raycast(
+                eventData,
+                resultAppendList,
+                new Ray(
+                    eventCamera.transform.position,
+                    (pointer.transform.position - eventCamera.transform.position).normalized
+                ),
+                false
+            );
         }
     }
-
 
     /// <summary>
     /// Perform a raycast into the screen and collect all graphics underneath it.
@@ -258,7 +284,6 @@ public class OVRRaycaster : GraphicRaycaster, IPointerEnterHandler
         return eventCamera.WorldToScreenPoint(raycastResult.worldPosition);
     }
 
-
     /// <summary>
     /// Detects whether a ray intersects a RectTransform and if it does also
     /// returns the world position of the intersection.
@@ -267,7 +292,11 @@ public class OVRRaycaster : GraphicRaycaster, IPointerEnterHandler
     /// <param name="ray"></param>
     /// <param name="worldPos"></param>
     /// <returns></returns>
-    static bool RayIntersectsRectTransform(RectTransform rectTransform, Ray ray, out Vector3 worldPos)
+    static bool RayIntersectsRectTransform(
+        RectTransform rectTransform,
+        Ray ray,
+        out Vector3 worldPos
+    )
     {
         Vector3[] corners = new Vector3[4];
         rectTransform.GetWorldCorners(corners);
@@ -286,13 +315,18 @@ public class OVRRaycaster : GraphicRaycaster, IPointerEnterHandler
         Vector3 LeftEdge = corners[1] - corners[0];
         float BottomDot = Vector3.Dot(intersection - corners[0], BottomEdge);
         float LeftDot = Vector3.Dot(intersection - corners[0], LeftEdge);
-        if (BottomDot < BottomEdge.sqrMagnitude && // Can use sqrMag because BottomEdge is not normalized
-            LeftDot < LeftEdge.sqrMagnitude &&
-            BottomDot >= 0 &&
-            LeftDot >= 0)
+        if (
+            BottomDot < BottomEdge.sqrMagnitude
+            && // Can use sqrMag because BottomEdge is not normalized
+            LeftDot < LeftEdge.sqrMagnitude
+            && BottomDot >= 0
+            && LeftDot >= 0
+        )
         {
-            worldPos = corners[0] + LeftDot * LeftEdge / LeftEdge.sqrMagnitude +
-                       BottomDot * BottomEdge / BottomEdge.sqrMagnitude;
+            worldPos =
+                corners[0]
+                + LeftDot * LeftEdge / LeftEdge.sqrMagnitude
+                + BottomDot * BottomEdge / BottomEdge.sqrMagnitude;
             return true;
         }
         else
@@ -302,14 +336,12 @@ public class OVRRaycaster : GraphicRaycaster, IPointerEnterHandler
         }
     }
 
-
     struct RaycastHit
     {
         public Graphic graphic;
         public Vector3 worldPos;
         public bool fromMouse;
     };
-
 
     /// <summary>
     /// Is this the currently focussed Raycaster according to the InputModule

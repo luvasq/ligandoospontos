@@ -71,8 +71,8 @@ public class SessionListHandler : MonoBehaviour
                 ?.GetComponent<TextMeshProUGUI>();
 
             dateText.SetText(item.timestamp);
-            diffText.SetText(Math.Round(item.difficultyFactor).ToString());
-            scoreText.SetText(Math.Round(item.score).ToString());
+            diffText.SetText(Math.Round(item.difficultyFactor, 2).ToString());
+            scoreText.SetText(Math.Round(item.score, 2).ToString());
             // Add click event
             listItem
                 .GetComponentInChildren<Button>()

@@ -17,7 +17,8 @@ public class ActivityConfigUI : MonoBehaviour
     public TMP_Dropdown selectedActivityDropdown;
 
     // The loaded configuration data
-    private SessionData.DiffDetails activityConfig;
+    public SessionData.DiffDetails activityConfig;
+    public float diffFactor = 1f;
 
     void Start()
     {
@@ -182,9 +183,9 @@ public class ActivityConfigUI : MonoBehaviour
         }
     }
 
-    private float CalcDiffFactor(SessionData.DiffDetails activityConfig)
+    public float CalcDiffFactor(SessionData.DiffDetails activityConfig)
     {
-        float diffFactor = 1f;
+        diffFactor = 1f;
 
         foreach (var kvp in activityConfig)
         {

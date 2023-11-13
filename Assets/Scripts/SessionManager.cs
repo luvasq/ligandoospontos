@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,11 @@ public class SessionManager : MonoBehaviour
     public TMP_Dropdown patientDropdown;
     public TMP_Dropdown activityDropdown;
 
+    public ActivityConfigUI activityConfig;
+
     private string dataFilePath;
+
+    private float lastStartTime;
 
     public void Save()
     {
@@ -20,15 +25,17 @@ public class SessionManager : MonoBehaviour
         string selectedPatient = patientDropdown.options[patientDropdown.value].text;
         string selectedActivity = activityDropdown.options[activityDropdown.value].text;
 
+        float timeTaken = Time.time - lastStartTime;
+        Debug.Log($"timeTaken: {timeTaken}");
         SessionData session = new SessionData
         {
             patient = selectedPatient,
             activity = selectedActivity,
             timestamp = currentDateTime.ToString(),
-            timeTaken = 30.5f,
-            difficultyFactor = 0.8f,
-            score = 95.5f,
-            difficulty = new SessionData.DiffDetails { { "Altura", 2.3f }, { "Distância", 1.7f } },
+            timeTaken = timeTaken,
+            difficultyFactor = activityConfig.diffFactor,
+            score = CalcScore(timeTaken, activityConfig.diffFactor),
+            difficulty = activityConfig.activityConfig,
         };
 
         string folderPath = Path.Combine(
@@ -50,26 +57,37 @@ public class SessionManager : MonoBehaviour
         File.WriteAllText(dataFilePath, jsonData);
     }
 
-    public SessionData Load()
+    public void SaveStartTime()
     {
-        string selectedPatient = patientDropdown.options[patientDropdown.value].text;
-        string selectedActivity = activityDropdown.options[activityDropdown.value].text;
-
-        string folderPath = Path.Combine(
-            Application.persistentDataPath,
-            selectedPatient,
-            selectedActivity
-        );
-
-        if (File.Exists(dataFilePath))
-        {
-            string jsonData = File.ReadAllText(dataFilePath);
-            return JsonUtility.FromJson<SessionData>(jsonData);
-        }
-        else
-        {
-            // Handle the case where the file doesn't exist (no saved data)
-            return new SessionData(); // You can return default values or handle this as needed
-        }
+        lastStartTime = Time.time;
+        Debug.Log($"lastStartTime: {lastStartTime.ToString()}");
     }
+
+    public float CalcScore(float timeTaken, float diffFactor)
+    {
+        return diffFactor * 1000 / timeTaken;
+    }
+
+    // public SessionData Load()
+    // {
+    //     string selectedPatient = patientDropdown.options[patientDropdown.value].text;
+    //     string selectedActivity = activityDropdown.options[activityDropdown.value].text;
+
+    //     string folderPath = Path.Combine(
+    //         Application.persistentDataPath,
+    //         selectedPatient,
+    //         selectedActivity
+    //     );
+
+    //     if (File.Exists(dataFilePath))
+    //     {
+    //         string jsonData = File.ReadAllText(dataFilePath);
+    //         return JsonUtility.FromJson<SessionData>(jsonData);
+    //     }
+    //     else
+    //     {
+    //         // Handle the case where the file doesn't exist (no saved data)
+    //         return new SessionData(); // You can return default values or handle this as needed
+    //     }
+    // }
 }
