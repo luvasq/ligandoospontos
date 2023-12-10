@@ -37,7 +37,7 @@ public class checkKeyToStart : MonoBehaviour
         // Posição desejada para a instância do prefab
         Vector3 posicaoPrefab = new Vector3(
             0.5f + 0.1f * sessionManager.activityConfig.activityConfig["Distância do lixo"],
-            0.332f,
+            0.49f,
             -0.037f
         );
 
