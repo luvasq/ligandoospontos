@@ -3121,7 +3121,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 59526350}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
+        m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9951,11 +9951,11 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
+    - m_Text: Jogar bola no lixo
+      m_Image: {fileID: 0}
     - m_Text: "Apertar Bot\xE3o"
       m_Image: {fileID: 0}
     - m_Text: Abrir Porta
-      m_Image: {fileID: 0}
-    - m_Text: Jogar bola no lixo
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10573,11 +10573,11 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
+    - m_Text: Jogar bola no lixo
+      m_Image: {fileID: 0}
     - m_Text: "Apertar Bot\xE3o"
       m_Image: {fileID: 0}
     - m_Text: Abrir Porta
-      m_Image: {fileID: 0}
-    - m_Text: Jogar bola no lixo
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

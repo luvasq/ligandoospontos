@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEditor;
 using UnityEngine;
 
@@ -48,6 +49,22 @@ public class checkKeyToStart : MonoBehaviour
             activityProps.transform
         );
 
-        instanciaPrefab.tag = "lata";
+        Debug.Log("tag do lixo antes: " + instanciaPrefab.tag);
+
+        DefineTagRecursiva(instanciaPrefab, "lata");
+
+        Debug.Log("tag do lixo depois: " + instanciaPrefab.tag);
+    }
+
+    void DefineTagRecursiva(GameObject objeto, string novaTag)
+    {
+        // Define a tag para o objeto atual
+        objeto.tag = novaTag;
+
+        // Define a tag para todos os filhos do objeto atual
+        foreach (Transform filho in objeto.transform)
+        {
+            DefineTagRecursiva(filho.gameObject, novaTag);
+        }
     }
 }

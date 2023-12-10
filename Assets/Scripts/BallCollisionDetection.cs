@@ -10,9 +10,9 @@ public class BallCollisionDetection : MonoBehaviour
 
     public GameObject activityProps;
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
-        Debug.Log("COLIDIU: " + other.gameObject.tag);
+        Debug.Log("COLIDIU: " + other);
         if (other.gameObject.tag == "lata")
         {
             sessionManager.Save();
