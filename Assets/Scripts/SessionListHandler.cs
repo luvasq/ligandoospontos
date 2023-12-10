@@ -13,6 +13,10 @@ public class SessionListHandler : MonoBehaviour
     public ScrollRect itemsContainer;
     public GameObject itemPrefab;
 
+    public GameObject detailsPopup;
+
+    public TMP_Text detailsText;
+
     void Start()
     {
         Debug.Log("rodou start da lista");
@@ -106,8 +110,29 @@ public class SessionListHandler : MonoBehaviour
 
     void OnButtonClick(SessionData item)
     {
-        // Handle item click (expand/collapse details, show popup, etc.)
-        Debug.Log($"Item Clicked: {item.timestamp}");
+        // Use StringBuilder for efficient string concatenation
+        System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+
+        // Iterate through each field in SessionData
+        stringBuilder.AppendLine($"Paciente: {item.patient}");
+        stringBuilder.AppendLine($"Atividade: {item.activity}");
+        stringBuilder.AppendLine($"Data: {item.timestamp}");
+        stringBuilder.AppendLine($"Tempo de Execução: {item.timeTaken}s");
+        stringBuilder.AppendLine($"Fator de dificuldade: x{item.difficultyFactor}");
+        stringBuilder.AppendLine($"Pontuação: {item.score}");
+        stringBuilder.AppendLine($"Configurações de dificuldade:");
+
+        // Iterate through each key-value pair in the nested dictionary
+        foreach (var kvp in item.difficulty)
+        {
+            stringBuilder.AppendLine($"    {kvp.Key}: {kvp.Value}");
+        }
+
+        // Convert the StringBuilder to a regular string
+        string result = stringBuilder.ToString();
+
+        detailsText.SetText(result);
+        detailsPopup.SetActive(true);
     }
 
     public void ClearTable()

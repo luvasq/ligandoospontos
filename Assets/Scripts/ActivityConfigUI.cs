@@ -85,9 +85,17 @@ public class ActivityConfigUI : MonoBehaviour
                     { "Distância", 1.7f }
                 };
             }
-            else
+            else if (activityName == "Abrir Porta")
             {
                 defaults = new SessionData.DiffDetails { { "Grau", 2.3f }, { "Distância", 1.7f } };
+            }
+            else if (activityName == "Jogar bola no lixo")
+            {
+                defaults = new SessionData.DiffDetails { { "Distância do lixo", 1f } };
+            }
+            else
+            {
+                defaults = new SessionData.DiffDetails { };
             }
 
             string jsonData = JsonConvert.SerializeObject(defaults);
