@@ -14,10 +14,10 @@ O projeto "Ligando os Pontos" é uma ferramenta de reabilitação motora para me
 
 ## Pré-requisitos
 
-Antes de começar, certifique-se de ter instalado:
+Antes de começar, certifique-se de ter baixado:
 
 - [Unity](https://unity.com/)
-- [Oculus Interaction SDK](https://developer.oculus.com/documentation/unity/unity-getting-started/)
+- [Oculus Interaction SDK](https://developer.oculus.com/documentation/unity/unity-isdk-interaction-sdk-overview/) v57 ou superior
 
 ## Instalação
 
