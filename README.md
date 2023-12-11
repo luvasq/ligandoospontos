@@ -1,4 +1,4 @@
-**Ligando os Pontos: Ferramenta de Reabilitação Motora para VR**
+# **Ligando os Pontos: Ferramenta de Reabilitação Motora para VR**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
