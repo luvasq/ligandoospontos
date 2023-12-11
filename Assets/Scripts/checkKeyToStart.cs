@@ -11,12 +11,14 @@ public class checkKeyToStart : MonoBehaviour
     public GameObject beforeStartPage;
     public GameObject activityProps;
     public GameObject trashCan;
+    public GameObject bola;
 
     // Update is called once per frame
     void Update()
     {
         if (OVRInput.Get(OVRInput.Button.One))
         {
+            bola.transform.position = new Vector3(0.0f, 1.144f, 0.57f);
             activityProps.SetActive(true);
             InstanciarLixo();
             sessionManager.SaveStartTime();
@@ -49,11 +51,11 @@ public class checkKeyToStart : MonoBehaviour
             activityProps.transform
         );
 
-        Debug.Log("tag do lixo antes: " + instanciaPrefab.tag);
+        // Debug.Log("tag do lixo antes: " + instanciaPrefab.tag);
 
-        DefineTagRecursiva(instanciaPrefab, "lata");
+        // DefineTagRecursiva(instanciaPrefab, "lata");
 
-        Debug.Log("tag do lixo depois: " + instanciaPrefab.tag);
+        // Debug.Log("tag do lixo depois: " + instanciaPrefab.tag);
     }
 
     void DefineTagRecursiva(GameObject objeto, string novaTag)
